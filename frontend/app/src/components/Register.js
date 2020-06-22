@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import axios from 'axios';
 
 export class Register extends Component {
   state = {
     creds: {
       email: '',
-      username: '',
       password: ''
     }
   }
@@ -21,10 +21,18 @@ export class Register extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    const { email, username, password } = this.state.creds;
+    const { email, password } = this.state.creds;
 
     // axios call
-
+    axios
+    .post('http://localhost:5000/api/register', {email, password})
+    .then(res => {
+      console.log(res)
+      localStorage.setItem("token", res.data.token)
+    })
+    .catch(err => {
+      console.log(err)
+    })
   }
 
   render() {
@@ -48,13 +56,6 @@ export class Register extends Component {
           onChange = { this.handleChange }
           placeholder="Email"
           name="email"
-          style = { input }
-        />
-        <input 
-          type="text"
-          onChange = { this.handleChange }
-          placeholder="username"
-          name="username"
           style = { input }
         />
         <input 
