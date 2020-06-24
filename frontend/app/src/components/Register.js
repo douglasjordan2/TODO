@@ -25,7 +25,7 @@ export class Register extends Component {
 
     // axios call
     axios
-    .post('http://localhost:5000/api/register', {email, password})
+    .post('http://localhost:5000/api/register', {email: email, password: password})
     .then(res => {
       console.log(res)
       localStorage.setItem("token", res.data.token)

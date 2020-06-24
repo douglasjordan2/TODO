@@ -25,6 +25,29 @@ router.post('/api/register', validateData, validateUser, async (req, res) => {
   }
 })
 
+router.post('/api/login', validateData, async (req, res) => {
+  try {
+    const user = await Auth.login(req.body);
+    console.log(user)
+
+    if(user && bcrypt.compareSync(req.body.password, user.password)) {
+      const token = generateToken(user)
+
+      console.log(token)
+
+      return res.status(200).json({
+        message: `Welcome! ${user.email}`,
+        userId: user.id,
+        token
+      })
+    } else {
+      res.status(401).json({ message: 'invalid credentials' })
+    }
+  } catch (err) {
+    res.status(500).json({ message: 'unknown err' })
+  }
+})
+
 function validateData(req, res, next) {
   const { email, password } = req.body;
 

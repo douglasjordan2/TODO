@@ -1,9 +1,10 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import axios from 'axios';
 
 export class Login extends Component {
   state = {
     creds: {
-      username: '',
+      email: '',
       password: ''
     }
   }
@@ -20,10 +21,21 @@ export class Login extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    const { username, password } = this.state.creds;
+    const { email, password } = this.state.creds;
 
-    // axios call
-
+    axios
+    .post('http://localhost:5000/api/login', {email: email, password: password})
+    .then(res => {
+      console.log(res);
+      localStorage.setItem("token", res.data.token)
+      localStorage.setItem('user', res.data.userId)
+    })
+    .catch(err => {
+      console.log(err)
+      if(err) {
+        localStorage.removeItem("token")
+      }
+    })
   }
 
   render() {
@@ -45,8 +57,8 @@ export class Login extends Component {
         <input 
           type="text"
           onChange = { this.handleChange }
-          placeholder="username"
-          name="username"
+          placeholder="email"
+          name="email"
           style = { input }
         />
         <input 
