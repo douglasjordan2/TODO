@@ -16,8 +16,12 @@ router.post('/api/register', validateData, validateUser, async (req, res) => {
   const hash = bcrypt.hashSync(user.password, 12);
   user.password = hash;
 
+  console.log(user)
+
   try {
+    console.log('in try')
     const result = await Auth.register(user);
+    console.log(result)
 
     res.status(200).json(result)
   } catch(err) {

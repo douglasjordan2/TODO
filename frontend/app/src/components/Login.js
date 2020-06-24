@@ -24,18 +24,19 @@ export class Login extends Component {
     const { email, password } = this.state.creds;
 
     axios
-    .post('http://localhost:5000/api/login', {email: email, password: password})
-    .then(res => {
-      console.log(res);
-      localStorage.setItem("token", res.data.token)
-      localStorage.setItem('user', res.data.userId)
-    })
-    .catch(err => {
-      console.log(err)
-      if(err) {
-        localStorage.removeItem("token")
-      }
-    })
+      .post('http://localhost:5000/api/login', {email: email, password: password})
+      .then(res => {
+        console.log(res);
+        localStorage.setItem("token", res.data.token)
+        localStorage.setItem('user', res.data.userId)
+      })
+      .then(() => this.props.history.push('/todo'))
+      .catch(err => {
+        console.log("in error")
+        if(err) {
+          localStorage.removeItem("token")
+        }
+      })
   }
 
   render() {

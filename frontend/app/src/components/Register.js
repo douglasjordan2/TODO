@@ -23,12 +23,27 @@ export class Register extends Component {
 
     const { email, password } = this.state.creds;
 
-    // axios call
     axios
     .post('http://localhost:5000/api/register', {email: email, password: password})
     .then(res => {
       console.log(res)
-      localStorage.setItem("token", res.data.token)
+      // localStorage.setItem("token", res.data.token)
+    })
+    .then(() => {
+      axios
+        .post('http://localhost:5000/api/login', {email: email, password: password})
+        .then(res => {
+          console.log(res);
+          localStorage.setItem("token", res.data.token)
+          localStorage.setItem('user', res.data.userId)
+        })
+        .then(() => this.props.history.push('/todo'))
+        .catch(err => {
+          console.log("in error")
+          if(err) {
+            localStorage.removeItem("token")
+          }
+        })
     })
     .catch(err => {
       console.log(err)

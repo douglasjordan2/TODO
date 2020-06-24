@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Home from './components/Home';
 import Register from './components/Register';
 import Login from './components/Login';
+import TodoApp from './components/MainApp/TodoApp';
+import PrivateRoute from './components/auth/PrivateRoute';
 
 class App extends Component {
   render() {
@@ -18,11 +20,11 @@ class App extends Component {
     return (
       <Router>
         <div style = { page }>
-          <h1>TODO App - Javascript Interview</h1>
+          <h1>Javascript Interview</h1>
           <Route exact path="/" exact component = { Home }  />
           <Route exact path="/login" exact component = { Login }  />
           <Route exact path="/register" exact component = { Register }  />
-          {/* <Route exact path="/todo" exact component = { Todo }  /> */}
+          <PrivateRoute exact path="/todo" exact component = { TodoApp }  />
         </div>
       </Router>
     );

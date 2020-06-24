@@ -33,10 +33,13 @@ router.get('/api/users/:id/todos', restricted, validateUser, async (req, res) =>
 });
 
 router.post('/api/todos', restricted, async (req, res) => {
+  console.log('in post')
   try {
     const { user_id, task } = req.body;
+    console.log(req.body)
 
     if(user_id && task) {
+      console.log('in if statement')
       const [query] = await Todos.insert(req.body);
       const todo = await Todos.findTodo(query);
 

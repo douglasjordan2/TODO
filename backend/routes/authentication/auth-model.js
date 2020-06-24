@@ -9,9 +9,10 @@ module.exports = {
 function register(user) {
   return db('users')
     .insert(user)
-    .then(([id]) => db('users'))
+    .then(([id]) => db('users')
       .where('id', id)
       .first()
+    )
 }
 
 async function validate(email) {
