@@ -25,7 +25,6 @@ function filterByUser(id) {
 }
 
 function insert(todo) {
-  console.log('in insert')
   return db('todos')
     .insert(todo);
 }

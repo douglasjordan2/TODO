@@ -1,14 +1,8 @@
 const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
 
 const server = express();
 
-server.use(
-  express.json(),
-  cors(),
-  helmet()
-)
+server.use(express.json())
 
 const authRouter = require('../routes/authentication/auth-router');
 const todoRouter = require('../routes/todo-routes/todo-router');

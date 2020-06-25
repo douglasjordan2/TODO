@@ -21,12 +21,9 @@ export class Login extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    const { email, password } = this.state.creds;
-
     axios
-      .post('http://localhost:5000/api/login', {email: email, password: password})
+      .post('http://localhost:5000/api/login', this.state.creds)
       .then(res => {
-        console.log(res);
         localStorage.setItem("token", res.data.token)
         localStorage.setItem('user', res.data.userId)
       })

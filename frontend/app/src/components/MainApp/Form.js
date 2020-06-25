@@ -36,6 +36,7 @@ export class Form extends Component {
       .post('http://localhost:5000/api/todos', {...this.state.todo, user_id: user})
       .then(() => {
         document.querySelector('#form').reset();
+        this.setState({ todo: { ...this.state.todo, completed: false } })
       })
       .catch(err => console.log('in error \n', err))
 
@@ -45,7 +46,11 @@ export class Form extends Component {
   render() {
     const form = {
       display: 'flex',
-      flexDirection: 'column'
+      flexDirection: 'column',
+    }
+
+    const h3 = { 
+      margin: '0 0 10px 0' 
     }
 
     const flex = {
@@ -66,13 +71,23 @@ export class Form extends Component {
       width: '40%',
     }
 
+    const label = { 
+      margin: '5px' 
+    }
+
+    const submit = {
+      width: '50%',
+      margin: '10px auto',
+      padding: '5px'
+    }
+
     return (
       <form 
         style = { form }
         onSubmit = { this.handleSubmit }
         id="form"
       >
-        <h3 style = {{ margin: '0 0 20px 0' }}>Add TODO</h3>
+        <h3 style = { h3 }>Add TODO</h3>
         <div style = { flex }>
           <input 
             name="task"
@@ -81,7 +96,7 @@ export class Form extends Component {
             onChange = { this.handleChange }
           />
           <div style = { column }>
-            <label style = {{ margin: '5px' }}>
+            <label style = { label }>
               <input 
                 type="checkbox" 
                 name="completed" 
@@ -92,7 +107,10 @@ export class Form extends Component {
             </label>
           </div>
         </div>
-        <input type="submit" />
+        <input 
+          type="submit" 
+          style = { submit }
+        />
       </form>
     )
   }

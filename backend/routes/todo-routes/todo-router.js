@@ -5,22 +5,6 @@ const restricted = require('../authentication/restricted-middleware');
 const Todos = require('./todo-model');
 const db = require('../../data/dbConfig');
 
-router.get('/api/todos', restricted, async (req, res) => {
-  try {
-    const todos = await Todos.find();
-    res.status(200).json(todos);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-router.get('/api/todos/:todo_id', restricted, validateData, async (req, res) => {
-  const todo_id = parseInt(req.params.todo_id);
-  const todo = await Todos.findTodo(todo_id);
-
-  res.status(200).json(todo)
-});
-
 router.get('/api/users/:id/todos', restricted, validateUser, async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -33,13 +17,10 @@ router.get('/api/users/:id/todos', restricted, validateUser, async (req, res) =>
 });
 
 router.post('/api/todos', restricted, async (req, res) => {
-  console.log('in post')
   try {
     const { user_id, task } = req.body;
-    console.log(req.body)
 
     if(user_id && task) {
-      console.log('in if statement')
       const [query] = await Todos.insert(req.body);
       const todo = await Todos.findTodo(query);
 
@@ -52,7 +33,7 @@ router.post('/api/todos', restricted, async (req, res) => {
   }
 });
 
-router.put('/api/todo/:todo_id', restricted, validateData, async (req, res) => {
+router.put('/api/todos/:todo_id', restricted, validateData, async (req, res) => {
   const todo_id = parseInt(req.params.todo_id);
 
   const { task } = req.body;
@@ -69,18 +50,9 @@ router.put('/api/todo/:todo_id', restricted, validateData, async (req, res) => {
 
 router.delete('/api/todos/:todo_id', restricted, validateData, async (req, res) => {
   const todo_id = parseInt(req.params.todo_id);
+  await Todos.remove(todo_id)
 
-  try {
-    const todo = await Todos.findTodo(todo_id);
-
-    if(todo) {
-      next();
-    } else {
-      res.status(403).json({ message: 'Todo not found.' })
-    }
-  } catch (err) {
-    res.status(500).json(err);
-  }
+  res.status(200).json({ message: 'Deleted successfully.' })
 })
 
 async function validateData(req, res, next) {

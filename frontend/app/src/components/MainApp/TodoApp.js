@@ -14,12 +14,19 @@ export class TodoApp extends Component {
     this.updateTodos();
   }
 
-  updateTodos = async () => {
+  updateTodos = () => {
     const user_id = localStorage.getItem('user')
-    await axiosWithAuth()
+    axiosWithAuth()
       .get(`http://localhost:5000/api/users/${user_id}/todos`)
       .then(res => this.setState({ todos: res.data }))
       .catch(err => console.log(err))
+  }
+
+  logout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+
+    this.props.history.push('/')
   }
 
   render() {
@@ -53,22 +60,38 @@ export class TodoApp extends Component {
       padding: '10px'
     }
 
+    const logout = {
+      color: 'blue',
+      fontSize: '1.2rem',
+      marginTop: '20px',
+      cursor: 'pointer'
+    }
+
     return (
-      <div style = { container }>
-        <div style = { heading }>
-          <h1 style = { h1 }>TODOs</h1>
+      <>
+        <div style = { container }>
+          <div style = { heading }>
+            <h1 style = { h1 }>TODOs</h1>
+          </div>
+          <div style = { todosContainer }>
+            <Todos 
+              todos = { this.state.todos }
+              updateTodos = { this.updateTodos }
+            />
+          </div>
+          <div style = { todoForm }>
+            <Form 
+              updateTodos = { this.updateTodos }
+            />
+          </div>
         </div>
-        <div style = { todosContainer }>
-          <Todos 
-            todos = { this.state.todos }
-          />
-        </div>
-        <div style = { todoForm }>
-          <Form 
-            updateTodos = { this.updateTodos }
-          />
-        </div>
-      </div>
+        <span 
+          style = { logout }
+          onClick = { this.logout }
+        >
+          Logout
+        </span>
+      </>
     )
   }
 }

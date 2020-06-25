@@ -6,8 +6,6 @@ const generateToken = require('../../config/token-service');
 
 const Auth = require('./auth-model');
 
-const db = require('../../data/dbConfig');
-
 router.use(express.json(), cors());
 
 router.post('/api/register', validateData, validateUser, async (req, res) => {
@@ -16,12 +14,9 @@ router.post('/api/register', validateData, validateUser, async (req, res) => {
   const hash = bcrypt.hashSync(user.password, 12);
   user.password = hash;
 
-  console.log(user)
 
   try {
-    console.log('in try')
     const result = await Auth.register(user);
-    console.log(result)
 
     res.status(200).json(result)
   } catch(err) {
@@ -32,12 +27,10 @@ router.post('/api/register', validateData, validateUser, async (req, res) => {
 router.post('/api/login', validateData, async (req, res) => {
   try {
     const user = await Auth.login(req.body);
-    console.log(user)
 
     if(user && bcrypt.compareSync(req.body.password, user.password)) {
       const token = generateToken(user)
 
-      console.log(token)
 
       return res.status(200).json({
         message: `Welcome! ${user.email}`,
